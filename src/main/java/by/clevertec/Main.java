@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -138,7 +139,10 @@ public class Main {
 
     public static void task10() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        int totalAge = animals.stream()
+                .mapToInt(Animal::getAge)
+                .sum();
+        System.out.println(totalAge);
     }
 
     public static void task11() {
