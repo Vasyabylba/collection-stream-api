@@ -82,7 +82,13 @@ public class Main {
 
     public static void task5() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        boolean hasHungarianAnimal = animals.stream()
+                .filter(animal -> {
+                    int age = animal.getAge();
+                    return age >= 20 & age <= 30;
+                })
+                .anyMatch(animal -> animal.getOrigin().equals("Hungarian"));
+        System.out.println(hasHungarianAnimal);
     }
 
     public static void task6() {
