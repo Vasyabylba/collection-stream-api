@@ -103,7 +103,9 @@ public class Main {
 
     public static void task7() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        boolean noneFromOceania = animals.stream()
+                .noneMatch(animal -> animal.getOrigin().equals("Oceania"));
+        System.out.println(noneFromOceania);
     }
 
     public static void task8() {
