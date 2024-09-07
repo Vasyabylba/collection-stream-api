@@ -11,6 +11,9 @@ import by.clevertec.util.Util;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.function.Function;
 
 public class Main {
 
@@ -110,7 +113,16 @@ public class Main {
 
     public static void task8() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        Optional<Integer> optionalMaxAge = animals.stream()
+                .sorted(Comparator.comparing(Animal::getBread))
+                .limit(100)
+                .map(Animal::getAge)
+                .max(Comparator.comparing(Function.identity()));
+        if (optionalMaxAge.isPresent()) {
+            System.out.println(optionalMaxAge.get());
+        } else {
+            System.out.println("No animals found");
+        }
     }
 
     public static void task9() {
