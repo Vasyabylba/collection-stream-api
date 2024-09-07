@@ -127,7 +127,13 @@ public class Main {
 
     public static void task9() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        Integer minLength = animals.stream()
+                .map(Animal::getBread)
+                .map(String::toCharArray)
+                .map(chars -> chars.length)
+                .min(Comparator.comparing(Function.identity()))
+                .orElse(0);
+        System.out.println(minLength);
     }
 
     public static void task10() {
