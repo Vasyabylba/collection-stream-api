@@ -147,7 +147,12 @@ public class Main {
 
     public static void task11() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        double averageAge = animals.stream()
+                .filter(animal -> animal.getOrigin().equals("Indonesian"))
+                .mapToInt(Animal::getAge)
+                .average()
+                .orElse(0.0);
+        System.out.println(averageAge);
     }
 
     public static void task12() {
