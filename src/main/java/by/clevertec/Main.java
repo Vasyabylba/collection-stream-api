@@ -74,7 +74,10 @@ public class Main {
 
     public static void task4() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        long femaleCount = animals.stream()
+                .filter(animal -> animal.getGender().equals("Female"))
+                .count();
+        System.out.println(femaleCount);
     }
 
     public static void task5() {
