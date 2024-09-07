@@ -93,7 +93,12 @@ public class Main {
 
     public static void task6() {
         List<Animal> animals = Util.getAnimals();
-//        animals.stream() Продолжить ...
+        boolean allAreMaleOrFemale = animals.stream()
+                .allMatch(animal -> {
+                    String gender = animal.getGender();
+                    return gender.equals("Male") || gender.equals("Female");
+                });
+        System.out.println(allAreMaleOrFemale);
     }
 
     public static void task7() {
