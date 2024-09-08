@@ -183,7 +183,30 @@ public class Main {
 
     public static void task15() {
         List<Flower> flowers = Util.getFlowers();
-//        flowers.stream() Продолжить ...
+        List<String> satisfactoryVaseMaterials = List.of("Glass", "Aluminum", "Steel");
+        double totalCost = flowers.stream()
+                .sorted(Comparator.comparing(Flower::getOrigin).reversed().
+                        thenComparing(Flower::getPrice).reversed()
+                        .thenComparing(Flower::getWaterConsumptionPerDay).reversed())
+                .filter(flower -> {
+                    String name = flower.getCommonName();
+                    return name.compareTo("S") >= 0 || name.compareTo("C") <= 0;
+                })
+                .filter(flower -> {
+                    if (flower.isShadePreferred()) {
+                        return flower.getFlowerVaseMaterial().stream()
+                                .anyMatch(satisfactoryVaseMaterials::contains);
+                    } else {
+                        return true;
+                    }
+                })
+                .mapToDouble(flower -> {
+                    int price = flower.getPrice();
+                    double waterConsumptionPerDay = flower.getWaterConsumptionPerDay();
+                    return price + waterConsumptionPerDay * (5 * 365) * 1.39;
+                })
+                .sum();
+        System.out.println("The total maintenance cost of all plants = " + totalCost);
     }
 
     public static void task16() {
