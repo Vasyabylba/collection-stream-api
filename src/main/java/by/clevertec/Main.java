@@ -273,6 +273,11 @@ public class Main {
 
     public static void task22() {
         List<Student> students = Util.getStudents();
-//        students.stream() Продолжить ...
+        Map<String, Integer> minAgeByFaculty = students.stream()
+                .collect(Collectors.toMap(
+                        Student::getFaculty,
+                        Student::getAge,
+                        Integer::min));
+        minAgeByFaculty.forEach((faculty, minAge) -> System.out.println(faculty + ": minimum age — " + minAge));
     }
 }
