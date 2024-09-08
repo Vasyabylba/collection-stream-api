@@ -12,8 +12,10 @@ import by.clevertec.util.Util;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -201,8 +203,11 @@ public class Main {
 
     public static void task18() {
         List<Student> students = Util.getStudents();
-        List<Examination> examinations = Util.getExaminations();
-//        students.stream() Продолжить ...
+        Map<String, Double> averageAgeByFaculty = students.stream()
+                .collect(Collectors.groupingBy(Student::getFaculty, Collectors.averagingInt(Student::getAge)));
+        averageAgeByFaculty.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .forEach(entry -> System.out.println("faculty = " + entry.getKey() + ", average age = " + entry.getValue()));
     }
 
     public static void task19() {
