@@ -266,7 +266,9 @@ public class Main {
 
     public static void task21() {
         List<Student> students = Util.getStudents();
-//        students.stream() Продолжить ...
+        Map<String, Long> groupStudentCount = students.stream()
+                .collect(Collectors.groupingBy(Student::getGroup, Collectors.counting()));
+        groupStudentCount.forEach((group, count) -> System.out.println(group + " - " + count + " students"));
     }
 
     public static void task22() {
