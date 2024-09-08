@@ -9,6 +9,7 @@ import by.clevertec.model.Person;
 import by.clevertec.model.Student;
 import by.clevertec.util.Util;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Main {
     private static final int RETIREMENT_AGE_OF_MALE = 63;
     private static final int RETIREMENT_AGE_OF_FEMALE = 58;
     private static final int RETIREMENT_AGE_OF_OTHER = 63;
+    private static final BigDecimal EXPENSES_PER_TONNE = BigDecimal.valueOf(7.14);
 
     public static void main(String[] args) {
         task1();
@@ -214,7 +216,43 @@ public class Main {
 
     public static void task14() {
         List<Car> cars = Util.getCars();
-//        cars.stream() Продолжить ...
+        Map<String, Long> totalCarMassByCounty = cars.stream()
+                .collect(Collectors.groupingBy(Main::determineCountry, Collectors.summingLong(Car::getMass)));
+        totalCarMassByCounty.forEach((country, totalMass) -> {
+            BigDecimal transportExpenses = BigDecimal.valueOf(totalMass).multiply(EXPENSES_PER_TONNE);
+            System.out.println(country + ": Total mass = " + totalMass + " kilograms, Transportation expenses = $" + transportExpenses);
+        });
+        BigDecimal logisticCompanyRevenue = totalCarMassByCounty.values().stream()
+                .map(BigDecimal::valueOf)
+                .reduce(BigDecimal.ZERO,
+                        (acc, revenue) -> acc.add(revenue.multiply(EXPENSES_PER_TONNE)));
+        System.out.println("Logistic company revenue: $" + logisticCompanyRevenue);
+    }
+
+    private static String determineCountry(Car car) {
+        if (car.getCarMake().equals("Jaguar") || car.getColor().equals("White")) {
+            return "Turkmenistan";
+        }
+        if (car.getMass() < 1_500 &&
+                List.of("BMW", "Lexus", "Chrysler", "Toyota").contains(car.getCarMake())) {
+            return "Uzbekistan";
+        }
+        if ((car.getColor().equals("Black") && car.getMass() > 4_000) ||
+                List.of("GMC", "Dodge").contains(car.getCarMake())) {
+            return "Kazakhstan";
+        }
+        if (car.getReleaseYear() < 1982 ||
+                List.of("Civic", "Cherokee").contains(car.getCarModel())) {
+            return "Kyrgyzstan";
+        }
+        if (!List.of("Yellow", "Red", "Green", "Blue").contains(car.getColor()) ||
+                car.getPrice() > 40_000) {
+            return "Russia";
+        }
+        if (car.getVin().contains("59")) {
+            return "Mongolia";
+        }
+        return "Other";
     }
 
     public static void task15() {
