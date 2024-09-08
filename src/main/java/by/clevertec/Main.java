@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Scanner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -212,7 +213,27 @@ public class Main {
 
     public static void task19() {
         List<Student> students = Util.getStudents();
-//        students.stream() Продолжить ...
+        List<Examination> examinations = Util.getExaminations();
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Enter group number:");
+            String targetGroup = scanner.next().strip();
+            if (targetGroup.isBlank()) {
+                throw new IllegalArgumentException("The group number must not be empty!!!");
+            }
+            Map<Integer, List<Examination>> studentExamsMap = examinations.stream()
+                    .collect(Collectors.groupingBy(Examination::getStudentId));
+            List<Student> passedStudents = students.stream()
+                    .filter(student -> student.getGroup().equals(targetGroup))
+                    .filter(student -> studentExamsMap.containsKey(student.getId()))
+                    .filter(student -> studentExamsMap.get(student.getId()).stream()
+                            .anyMatch(exam -> exam.getExam3() > 4))
+                    .toList();
+            if (passedStudents.isEmpty()) {
+                System.out.println("No passed students found in group " + targetGroup);
+            } else {
+                passedStudents.forEach(System.out::println);
+            }
+        }
     }
 
     public static void task20() {
