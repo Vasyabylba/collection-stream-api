@@ -17,8 +17,12 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
+    private static final int RETIREMENT_AGE_OF_MALE = 63;
+    private static final int RETIREMENT_AGE_OF_FEMALE = 58;
+    private static final int RETIREMENT_AGE_OF_OTHER = 63;
 
     public static void main(String[] args) {
         task1();
@@ -173,7 +177,39 @@ public class Main {
 
     public static void task13() {
         List<House> houses = Util.getHouses();
-//        houses.stream() Продолжить ...
+        LocalDate currentDate = LocalDate.now();
+        int sizeLimit = 500;
+        List<Person> hospitalPeoples = houses.stream()
+                .filter(house -> house.getBuildingType().equals("Hospital"))
+                .flatMap(house -> house.getPersonList().stream())
+                .limit(sizeLimit)
+                .toList();
+        int remainderSize = hospitalPeoples.size();
+        List<Person> childrenAndRetiredPeoples = houses.stream()
+                .filter(house -> !house.getBuildingType().equals("Hospital"))
+                .flatMap(house -> house.getPersonList().stream())
+                .filter(person -> {
+                    int age = person.getDateOfBirth().until(currentDate).getYears();
+                    int retirementAge = getRetirementAge(person.getGender());
+                    return age < 18 || age > retirementAge;
+                })
+                .limit(remainderSize)
+                .toList();
+        Stream.concat(hospitalPeoples.stream(), childrenAndRetiredPeoples.stream())
+                .limit(sizeLimit)
+                .forEach(System.out::println);
+    }
+
+    private static int getRetirementAge(String gender) {
+        int retirementAge;
+        if (gender.equals("Male")) {
+            retirementAge = RETIREMENT_AGE_OF_MALE;
+        } else if (gender.equals("Female")) {
+            retirementAge = RETIREMENT_AGE_OF_FEMALE;
+        } else {
+            retirementAge = RETIREMENT_AGE_OF_OTHER;
+        }
+        return retirementAge;
     }
 
     public static void task14() {
