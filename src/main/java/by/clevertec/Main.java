@@ -238,7 +238,30 @@ public class Main {
 
     public static void task20() {
         List<Student> students = Util.getStudents();
-//        students.stream() Продолжить ...
+        List<Examination> examinations = Util.getExaminations();
+        Map<String, List<Integer>> studentIdByFaculty = students.stream()
+                .collect(Collectors.groupingBy(Student::getFaculty,
+                        Collectors.mapping(Student::getId, Collectors.toList())));
+        Map<Integer, Double> averageExam1ByStudentId = examinations.stream()
+                .collect(Collectors.groupingBy(
+                        Examination::getStudentId,
+                        Collectors.averagingInt(Examination::getExam1)
+                ));
+        Map<String, Double> averageExam1ByFaculty = studentIdByFaculty.entrySet().stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> entry.getValue().stream()
+                                .mapToDouble(studentId ->
+                                        averageExam1ByStudentId.getOrDefault(studentId, 0.0)
+                                )
+                                .average()
+                                .orElse(0.0)
+                ));
+        String facultyWithMaxAverage = averageExam1ByFaculty.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse("Unknown Faculty");
+        System.out.println(facultyWithMaxAverage);
     }
 
     public static void task21() {
