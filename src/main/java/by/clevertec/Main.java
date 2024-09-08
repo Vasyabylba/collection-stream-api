@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
+    private static final long ZOO_SIZE = 7L;
     private static final int RETIREMENT_AGE_OF_MALE = 63;
     private static final int RETIREMENT_AGE_OF_FEMALE = 58;
     private static final int RETIREMENT_AGE_OF_OTHER = 63;
@@ -59,7 +60,7 @@ public class Main {
                     return age > 9 && age < 21;
                 })
                 .sorted(Comparator.comparing(Animal::getAge))
-                .skip(2 * 7)
+                .skip(2 * ZOO_SIZE)
                 .limit(7)
                 .forEach(System.out::println);
     }
@@ -97,7 +98,7 @@ public class Main {
         boolean hasHungarianAnimal = animals.stream()
                 .filter(animal -> {
                     int age = animal.getAge();
-                    return age >= 20 & age <= 30;
+                    return age >= 20 && age <= 30;
                 })
                 .anyMatch(animal -> animal.getOrigin().equals("Hungarian"));
         System.out.println(hasHungarianAnimal);
