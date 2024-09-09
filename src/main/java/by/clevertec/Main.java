@@ -219,6 +219,7 @@ public class Main {
         List<Car> cars = Util.getCars();
         Map<String, Long> totalCarMassByCounty = cars.stream()
                 .collect(Collectors.groupingBy(Main::determineCountry, Collectors.summingLong(Car::getMass)));
+        totalCarMassByCounty.remove("Other");
         totalCarMassByCounty.forEach((country, totalMass) -> {
             BigDecimal transportExpenses = BigDecimal.valueOf(totalMass).multiply(EXPENSES_PER_TONNE);
             System.out.println(country + ": Total mass = " + totalMass + " kilograms, Transportation expenses = $" + transportExpenses);
